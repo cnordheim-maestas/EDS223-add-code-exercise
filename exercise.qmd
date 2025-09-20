@@ -1,5 +1,5 @@
 ---
-title: "Add Code Eligibility Coding Exercise"
+title: "Add Code Eligibility Coding Exercise - Calint NOrhdime-Maestas"
 format: html
 editor: visual
 ---
@@ -15,6 +15,7 @@ library(tidyverse)
 library(palmerpenguins)
 library(ggplot2)
 library(dplyr)
+library(paletteer) # Added this for colors
 ```
 
 ## Data Exploration
@@ -45,10 +46,13 @@ Complete the following data cleaning steps in the `penguins_df` dataframe:
 ```{r data-cleaning}
 
 # Remove missing values
-
+penguins_df <- penguins_df %>% 
+  drop_na() %>% 
 
 
 # Create length_mass column that measures length to mass ratio for each penguin
+  # note: did not specify whether bill length or flipper length, I'll go with the flipper length because flippers are cute
+  mutate(length_mass = flipper_length_mm / body_mass_g)
 
 ```
 
@@ -65,7 +69,17 @@ Use `ggplot` to make a visualization of your choice with the penguin data. Be su
 -   Comments!
 
 ```{r data-viz}
-
+penguins_df %>% 
+  ggplot(aes(x = flipper_length_mm, y = body_mass_g, color = species)) + # specify data for axes
+  geom_point() + # scatterplot
+  labs( # add labels
+    x = "Flipper length", # x axis
+    y = "Body Mass (g)", # y axis
+    title = "Penguin flipper length and body mass, across species", # title for top of plot
+    caption = "Color palette credit: TayloR Swift, album midnights, by asteves" # caption at bottom with credit for color palette
+  ) + 
+  theme_minimal() + # update theme to my fave, low key gridded background, makes the data pop
+  scale_color_manual(values = paletteer_d("tayloRswift::midnights")) # color by species using Taylor swifts midnigths palette
 ```
 
 That's it! Head back to the README on the Github repo for submission instructions.
